@@ -1,0 +1,79 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model TypeGuides {
+  id            String @id @default(uuid())
+  title         String
+  resume        String
+
+  @@map("typeGuides")
+  guides Guides[]
+}
+
+model Guides {
+  id            String @id @default(uuid())
+  title         String
+  resume        String
+  about         String
+  obs           String
+  value         Int
+
+  typeGuides TypeGuides @relation(fields: [typeGuide_id], references: [id])
+
+  @@map("guides")
+  typeGuide_id String
+  pictures Pictures[]
+}
+
+model Pictures {
+  id            String @id @default(uuid())
+  path          String
+
+  guides Guides @relation(fields: [guide_id], references: [id])
+  @@map("pictures")
+  guide_id      String
+}
+
+model Cars {
+  id            String @id @default(uuid())
+  name          String
+  pathPicture   String
+
+  @@map("cars")
+}
+
+model Accommodation {
+  id            String @id @default(uuid())
+  name          String
+  pathPicture   String
+
+  @@map("accomodations")
+}
+
+model Posts {
+  id            String @id @default(uuid())
+  title         String
+  likes         Int
+
+  user User     @relation(fields: [user_id], references: [id])
+  @@map("posts")
+
+  user_id      String 
+}
+
+model User {
+  id            String @id @default(uuid())
+  name          String
+  password     String
+  email         String
+  cpf           String
+
+  @@map("users")
+  posts Posts[]
+}
